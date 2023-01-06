@@ -23,7 +23,6 @@ public class SendMailService : IEmailSender
         message.Subject = subject;
         var builder = new BodyBuilder();
         builder.HtmlBody = htmlMessage;
-        builder.Attachments.Add(@"D:\GiaHuy\Picture\8.jpg");
         message.Body = builder.ToMessageBody();
         
         //MailKit
@@ -36,7 +35,7 @@ public class SendMailService : IEmailSender
         catch(Exception e)
         {
             Directory.CreateDirectory("mailSave");
-            var emailSaveFile = String.Format(@"mailsave{0}.eml",Guid.NewGuid());
+            var emailSaveFile = String.Format(@"mailSave/mailsave{0}.eml",Guid.NewGuid());
             await message.WriteToAsync(emailSaveFile);
             logger.LogInformation("Fail to send Email!!!");
             logger.LogError(e.Message);
