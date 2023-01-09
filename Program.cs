@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using GiaHuy.Models;
 using GiaHuy.Service;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +41,27 @@ builder.Services.Configure<IdentityOptions> (options => {
 var mailSetting = builder.Configuration.GetSection("MailSetting");
 builder.Services.Configure<MailSetting>(mailSetting);
 builder.Services.AddTransient<IEmailSender,SendMailService>();
+
+builder.Services.AddAuthentication()
+                .AddGoogle(options=>{
+                    IConfigurationSection  googleAuthenticationSection =  builder.Configuration.GetSection("Authentication:Google");
+                    options.ClientId = googleAuthenticationSection["ClientID"];
+                    options.ClientSecret = googleAuthenticationSection["ClientSecret"];
+                    options.CallbackPath = "/login-google";
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
 var app = builder.Build();
 
 
@@ -50,10 +72,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseAuthentication();
 
