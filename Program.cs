@@ -14,11 +14,10 @@ builder.Services.AddDbContext<GiaHuyDbContext>(options=>{
     options.UseSqlServer(connectionString); 
 });
 
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<GiaHuyDbContext>();
-// builder.Services.AddIdentity<AppUser, IdentityRole>()
-//                 .AddEntityFrameworkStores<GiaHuyDbContext>()
-//                 .AddDefaultTokenProviders();
+builder.Services.AddIdentity<AppUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<GiaHuyDbContext>()
+                .AddDefaultTokenProviders();
+                
 builder.Services.Configure<IdentityOptions> (options => {
     options.Password.RequireDigit = false; 
     options.Password.RequireLowercase = false; 

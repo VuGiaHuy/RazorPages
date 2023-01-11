@@ -1,0 +1,11 @@
+﻿@page
+@model MyApp.Namespace.DeleteModel
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2 class="text-danger">Are you sure want to delete role <span class="badge bg-secondary">@Model.input.Name</span></h2>
+<form method="post">
+    <button class="btn btn-danger" type="submit">Yes</button>
+    <a class="btn btn-primary" asp-page="./Index">Index</a>
+</form>
