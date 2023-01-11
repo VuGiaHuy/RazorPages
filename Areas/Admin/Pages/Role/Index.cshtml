@@ -1,0 +1,28 @@
+﻿@page "/admin/roles"
+@model MyApp.Namespace.IndexModel
+@{
+    ViewData["Title"] = "Role Manager";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<partial name="_StatusMessage" model="@Model.statusMessage" ></partial>
+
+<div class="mb-2">
+
+    <a class="btn btn-primary" asp-page="./Create">Create</a>
+</div>
+<table>
+    <tr>
+        <th>Name Role</th>
+        <th>Edit</th>
+    </tr>
+    @foreach (var role in Model.roles)
+    {
+        <tr>
+            <td>@role.Name</td>
+            <td><a class="btn btn-success" asp-page="./Edit" asp-route-roleid="@role.Id">Edit</a></td>
+            <td><a class="btn btn-danger" asp-page="./Delete" asp-route-roleid="@role.Id">Delete</a></td>
+        </tr>
+    }
+</table>
