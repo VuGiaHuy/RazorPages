@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace GiaHuy.User
 {
@@ -19,14 +20,19 @@ namespace GiaHuy.User
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly GiaHuyDbContext _dbContext;
+        public List<IdentityRoleClaim<string>> RoleClaims {get;set;}
+        public List<IdentityUserClaim<string>> UserClaims {get;set;}
         public AddRoleModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            GiaHuyDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -81,7 +87,24 @@ namespace GiaHuy.User
             RoleNames = (await _userManager.GetRolesAsync(user)).ToArray<string>();
             List<string> roleNames = _roleManager.Roles.Select(role=>role.Name).ToList();
             roleName = new SelectList(roleNames);
+            await GetRoleClaim(id);
+           
+            
             return Page();
+        }
+        async Task GetRoleClaim(string id)
+        {
+            var listRole = from r in _dbContext.Roles
+                            join ur in _dbContext.UserRoles on r.Id equals ur.RoleId
+                            where ur.UserId == id
+                            select r;
+            var roleClaims = from c in _dbContext.RoleClaims
+                            join r in listRole on c.RoleId equals r.Id
+                            select c;
+            RoleClaims = await roleClaims.ToListAsync();
+            UserClaims = await (from c in _dbContext.UserClaims
+            where c.UserId == id
+            select c).ToListAsync();
         }
 
         public async Task<IActionResult> OnPostAsync(string id)
@@ -89,7 +112,8 @@ namespace GiaHuy.User
             if(String.IsNullOrEmpty(id)) return NotFound();
             user = await _userManager.FindByIdAsync(id);
             if(user == null) return NotFound("k tim thay user");
-
+            
+            await GetRoleClaim(id);
             var oldRoleName = (await _userManager.GetRolesAsync(user)).ToArray();
             var delRoles = oldRoleName.Where(role=>!RoleNames.Contains(role));
             var addRoles = RoleNames.Where(role=>!oldRoleName.Contains(role));   

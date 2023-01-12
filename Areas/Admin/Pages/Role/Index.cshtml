@@ -16,12 +16,20 @@
 <table class="table">
     <tr>
         <th>Name Role</th>
+        <th>Claim</th>
         <th>Task</th>
     </tr>
     @foreach (var role in Model.roles)
     {
         <tr>
             <td>@role.Name</td>
+            <td>
+            @foreach (var claim in @role.Claims)
+            {
+                <small>@claim</small>
+                <br />            
+            }
+            </td>
             <td>
                 <a class="btn btn-success" asp-page="./Edit" asp-route-roleid="@role.Id">Edit</a>
                 <a class="btn btn-danger" asp-page="./Delete" asp-route-roleid="@role.Id">Delete</a>
