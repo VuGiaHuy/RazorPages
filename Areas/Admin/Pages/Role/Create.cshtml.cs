@@ -32,7 +32,7 @@ namespace MyApp.Namespace
             var result = await _roleManager.CreateAsync(newRole);
             if(result.Succeeded)
             {
-                statusMessage = $"Create new role {input.Name}";
+                StatusMessage = $"Create new role {input.Name}";
                 return RedirectToPage("./Index");
             }
             else

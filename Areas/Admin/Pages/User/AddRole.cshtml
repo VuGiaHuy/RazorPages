@@ -1,0 +1,29 @@
+﻿@page
+@model GiaHuy.User.AddRoleModel
+@{
+    ViewData["Title"] = "Add Role";
+}
+
+<h2>Add role for user(@Model.user.UserName)</h2>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="row">
+    <div class="col-md-6">
+        <form id="set-password-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+               
+                @Html.ListBoxFor(addRoleModel =>addRoleModel.RoleNames,@Model.roleName, new{
+                    id = "id-select-roles",
+                    @class ="form-control h-100"
+                })
+                <span asp-validation-for="roleName" class="text-danger"></span>
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Update</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

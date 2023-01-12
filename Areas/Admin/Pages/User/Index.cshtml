@@ -1,0 +1,48 @@
+﻿@page
+@model GiaHuy.User.IndexModel
+@{
+    ViewData["Title"] = "List of Users";
+}
+
+<h2>@ViewData["Title"]</h2>
+<partial name="_StatusMessage" model = "@Model.StatusMessage"></partial>
+<h5>Numbers of Memer: <span class="badge bg-info">@Model.totalUser</span></h5>
+<hr>
+@{
+    Paging paging = new Paging();
+    paging.countPages = Model.countPages;
+    paging.currentPage = Model.currentPage;
+    paging.generateUrl = (int? p)=> Url.Page("./Index",new{pages=p})??default!;
+}
+@await Html.PartialAsync("_Paging",paging)
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Options</th>
+    </tr>
+    @foreach(var user in Model.users)
+    {
+        <tr>
+            <td>
+                @user.UserName
+            </td>
+            <td>
+                @if(string.IsNullOrEmpty(user.RoleNames))
+                {
+                    <a asp-page="./AddRole" asp-route-id="@user.Id">+ Add Role</a>
+                }
+                else
+                {
+                    <a asp-page="./AddRole" asp-route-id="@user.Id">@user.RoleNames</a>
+                }
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-page="./SetPassword" asp-route-id="@user.Id">Set Password</a>
+                <a class="btn btn-primary" asp-page="./DeleteRole" asp-route-id="@user.Id">Delete Role</a>
+            </td>
+        </tr>
+    }
+    
+</table>

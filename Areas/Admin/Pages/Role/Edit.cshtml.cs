@@ -48,7 +48,7 @@ namespace MyApp.Namespace
             var result = await _roleManager.UpdateAsync(role);
             if(result.Succeeded)
             {
-                statusMessage = $"{input.Name} update successful";
+                StatusMessage = $"{input.Name} update successful";
                 return RedirectToPage("./Index");
             }
             else

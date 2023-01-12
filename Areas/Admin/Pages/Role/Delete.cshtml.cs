@@ -43,7 +43,7 @@ namespace MyApp.Namespace
                var result = await _roleManager.DeleteAsync(role);
                if(result.Succeeded) 
                {
-                    statusMessage = $"{role.Name} delete successful!";
+                    StatusMessage = $"{role.Name} delete successful!";
                     return RedirectToPage("./Index");
                }
                else

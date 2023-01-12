@@ -9,7 +9,7 @@ public class RolePageModel : PageModel
     protected readonly GiaHuyDbContext _dbContext;
     
     [TempData]
-    public string statusMessage {get;set;}= default!;
+    public string StatusMessage {get;set;}= default!;
     public RolePageModel(RoleManager<IdentityRole> roleManager, GiaHuyDbContext dbContext)
     {
         _roleManager = roleManager;
