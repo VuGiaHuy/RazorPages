@@ -1,11 +1,15 @@
+using System.Net;
 using System.ComponentModel.DataAnnotations;
 using GiaHuy.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyApp.Namespace
 {
+    [Authorize(Policy = "Admin")]
     public class EditModel : RolePageModel
     {
         public EditModel(RoleManager<IdentityRole> roleManager, GiaHuyDbContext dbContext) : base(roleManager, dbContext)
@@ -20,6 +24,7 @@ namespace MyApp.Namespace
         }
         [BindProperty]
         public Input input {get;set;}
+        public List<IdentityRoleClaim<string>> Claims {set;get;}
         public IdentityRole role {get;set;} 
         public async Task<IActionResult> OnGet(string roleid)
         {
@@ -30,6 +35,7 @@ namespace MyApp.Namespace
                 input = new Input(){
                     Name = role.Name!
                 };
+                Claims = await _dbContext.RoleClaims.Where(rc => rc.RoleId == role.Id).ToListAsync();
                 return Page();
             }
             return NotFound();
@@ -42,13 +48,15 @@ namespace MyApp.Namespace
             {
                 return NotFound();
             }
+            Claims = await _dbContext.RoleClaims.Where(rc => rc.RoleId == role.Id).ToListAsync();
+
             if(!ModelState.IsValid) return NotFound();
 
             role.Name = input.Name;
             var result = await _roleManager.UpdateAsync(role);
             if(result.Succeeded)
             {
-                statusMessage = $"{input.Name} update successful";
+                StatusMessage = $"{input.Name} update successful";
                 return RedirectToPage("./Index");
             }
             else

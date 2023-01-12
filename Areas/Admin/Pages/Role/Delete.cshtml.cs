@@ -1,10 +1,12 @@
 using GiaHuy.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MyApp.Namespace
 {
+    [Authorize(Policy = "Admin")]
     public class DeleteModel : RolePageModel
     {
         public DeleteModel(RoleManager<IdentityRole> roleManager, GiaHuyDbContext dbContext) : base(roleManager, dbContext)
@@ -43,7 +45,7 @@ namespace MyApp.Namespace
                var result = await _roleManager.DeleteAsync(role);
                if(result.Succeeded) 
                {
-                    statusMessage = $"{role.Name} delete successful!";
+                    StatusMessage = $"{role.Name} delete successful!";
                     return RedirectToPage("./Index");
                }
                else

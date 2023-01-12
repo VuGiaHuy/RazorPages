@@ -1,9 +1,10 @@
 ﻿@page
 @model MyApp.Namespace.EditModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit Role";
 }
 <h2>@ViewData["Title"]</h2>
+<partial name="_StatusMessage" model="@Model.StatusMessage"></partial>
 <hr/>
 <div class="row">
     <div class="col-md-4">
@@ -19,6 +20,20 @@
                 <a class="btn btn-primary" asp-page="./Index">Index</a>
             </div>
         </form>
+        <hr>
+        <p>All claim of Role:
+        <a asp-page="./AddRoleClaim" asp-route-roleid = "@Model.role.Id">+ Add Role Claim</a>
+        </p>
+        @if(Model.Claims.Count >0)
+        {
+            <ul>
+                @foreach (var claim in Model.Claims)
+                {
+                    <a asp-page="./EditRoleClaim" asp-route-claimid="@claim.Id">@claim.ClaimType : @claim.ClaimValue</a>
+                    <br/>
+                }
+            </ul>
+        }
     </div>
 </div>
 

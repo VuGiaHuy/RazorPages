@@ -1,3 +1,4 @@
+using System.Net;
 using System.Runtime.InteropServices;
 using GiaHuy.Models;
 using GiaHuy.Service;
@@ -49,7 +50,13 @@ builder.Services.AddAuthentication()
                     options.CallbackPath = "/login-google";
                 });
 
-
+builder.Services.AddAuthorization(options=>{
+    options.AddPolicy("Admin", policy=>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireRole("Admin");
+    });
+});
 
 
 
@@ -74,8 +81,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
