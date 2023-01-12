@@ -91,7 +91,6 @@ namespace GiaHuy.User
                 return Page();
             }
 
-            await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Set password Successful";
 
             return RedirectToPage("./Index");
